@@ -1,0 +1,24 @@
+logging:
+  level:
+    root: INFO
+server:
+  port: 8081
+eagle:
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@10.67.67.63:1521/ebaouat1
+    username: ls_ebao
+    password: ls_ebaopwd
+spring:
+  datasource:
+    h2:
+      master:
+        url: jdbc:h2:mem:masterdb
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 
+      slave:
+        url: jdbc:h2:mem:slavedb
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 

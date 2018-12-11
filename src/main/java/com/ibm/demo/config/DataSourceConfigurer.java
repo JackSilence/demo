@@ -18,21 +18,22 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
 import com.google.common.collect.ImmutableMap;
 import com.ibm.demo.common.Source;
 import com.ibm.demo.ds.DynamicDataSource;
 
 @Configuration
-public class DataSourceConfigurer implements InitializingBean {
+public class DataSourceConfigurer implements TransactionManagementConfigurer, InitializingBean {
 	@Bean
-	@Primary
 	@ConfigurationProperties( prefix = "spring.datasource.h2.master" )
 	public DataSource master() {
 		return DataSourceBuilder.create().build();
 	}
 
 	@Bean
+	@Primary
 	@ConfigurationProperties( prefix = "spring.datasource.h2.slave" )
 	public DataSource slave() {
 		return DataSourceBuilder.create().build();
@@ -42,7 +43,7 @@ public class DataSourceConfigurer implements InitializingBean {
 	public DynamicDataSource dynamicDataSource() {
 		DynamicDataSource source = new DynamicDataSource();
 
-		source.setTargetDataSources( ImmutableMap.of( Source.MASTER, master(), Source.SLAVE, slave() ) );
+		source.setTargetDataSources( ImmutableMap.of( Source.WRITE, master(), Source.READ, slave(), Source.MASTER, master() ) );
 
 		source.setDefaultTargetDataSource( master() );
 
@@ -59,7 +60,8 @@ public class DataSourceConfigurer implements InitializingBean {
 	}
 
 	@Bean
-	public PlatformTransactionManager transactionManager() {
+	@Override
+	public PlatformTransactionManager annotationDrivenTransactionManager() {
 		return new DataSourceTransactionManager( dynamicDataSource() );
 	}
 

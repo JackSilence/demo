@@ -1,6 +1,5 @@
 package com.ibm.demo.aop;
 
-import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
@@ -30,25 +29,31 @@ public class DataSourceAspect {
 
 	@Before( "mapper()" )
 	public void before( JoinPoint point ) {
-		Signature signature = point.getSignature();
-
 		try {
-			log.info( point.getClass().getSimpleName() );
-			log.info( point.getClass().getName() );
+			if ( !Source.MASTER.equals( DynamicDataSourceHolder.get() ) ) {
+				Signature signature = point.getSignature();
 
-			Configuration config = sqlSessionFactory.getConfiguration();
-			String sql = config.getMappedStatement( signature.getName() ).getBoundSql( point.getArgs() ).getSql();
+				String id = String.format( "%s.%s", signature.getDeclaringTypeName(), signature.getName() );
 
-			DynamicDataSourceHolder.set( sql.toUpperCase().startsWith( "SELECT" ) ? Source.SLAVE : Source.MASTER );
+				String sql = sqlSessionFactory.getConfiguration().getMappedStatement( id ).getBoundSql( point.getArgs() ).getSql();
+
+				DynamicDataSourceHolder.set( sql.toUpperCase().startsWith( "SELECT" ) ? Source.READ : Source.WRITE );
+
+				log.info( "SQL: {}, Source: {}", sql, DynamicDataSourceHolder.get() );
+			}
 
 		} catch ( Exception e ) {
+			log.error( "", e );
+
 		}
 	}
 
 	@After( "mapper())" )
 	public void after( JoinPoint point ) {
+		Source source = DynamicDataSourceHolder.get();
+
 		DynamicDataSourceHolder.remove();
 
-		log.info( "Restore DataSource to [{}] in Method [{}]", DynamicDataSourceHolder.get(), point.getSignature() );
+		log.info( "Restore DataSource: {} -> {}, Method: {}", source, DynamicDataSourceHolder.get(), point.getSignature() );
 	}
 }

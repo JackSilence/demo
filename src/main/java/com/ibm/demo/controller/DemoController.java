@@ -44,13 +44,11 @@ public class DemoController {
 
 	@GetMapping( "read-all" )
 	public Map<Source, City> readAll() {
-		Source source = DynamicDataSourceHolder.get();
-
 		City city = select();
 
 		DynamicDataSourceHolder.set( Source.MASTER ); // 強制用master
 
-		return ImmutableMap.of( source, city, DynamicDataSourceHolder.get(), select() );
+		return ImmutableMap.of( Source.READ, city, Source.MASTER, select() );
 	}
 
 	@GetMapping( "write" )

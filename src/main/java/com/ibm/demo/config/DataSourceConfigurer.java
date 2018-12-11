@@ -66,12 +66,10 @@ public class DataSourceConfigurer implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		Stream.of( master(), slave() ).forEach( i -> {
-			Stream.of( "schema", "data" ).forEach( j -> {
-				Resource resource = new ClassPathResource( String.format( "db/%s.sql", j ) );
+			Resource resource = new ClassPathResource( "db/schema.sql" );
 
-				DatabasePopulatorUtils.execute( new ResourceDatabasePopulator( resource ), i );
+			DatabasePopulatorUtils.execute( new ResourceDatabasePopulator( resource ), i );
 
-			} );
 		} );
 	}
 }

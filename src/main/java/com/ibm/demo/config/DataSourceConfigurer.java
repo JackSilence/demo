@@ -27,13 +27,13 @@ import com.ibm.demo.ds.DynamicDataSource;
 @Configuration
 public class DataSourceConfigurer implements TransactionManagementConfigurer, InitializingBean {
 	@Bean
+	@Primary
 	@ConfigurationProperties( prefix = "spring.datasource.h2.master" )
 	public DataSource master() {
 		return DataSourceBuilder.create().build();
 	}
 
 	@Bean
-	@Primary
 	@ConfigurationProperties( prefix = "spring.datasource.h2.slave" )
 	public DataSource slave() {
 		return DataSourceBuilder.create().build();

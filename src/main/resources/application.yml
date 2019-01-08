@@ -3,12 +3,9 @@ logging:
     root: INFO
 server:
   port: 8081
-eagle:
-  datasource:
-    driver-class-name: oracle.jdbc.driver.OracleDriver
-    url: jdbc:oracle:thin:@10.67.67.63:1521/ebaouat1
-    username: ls_ebao
-    password: ls_ebaopwd
+management:
+  security:
+    enabled: false
 spring:
   datasource:
     h2:

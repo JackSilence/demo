@@ -9,7 +9,6 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ibm.demo.model.Message;
 
 @RestController
-@RequestMapping( value = "messages", produces = { MediaType.APPLICATION_JSON_UTF8_VALUE } )
+@RequestMapping( value = "messages", produces = "application/hal+json" )
 public class HATEOASController {
 	private static final List<Message> messages = new ArrayList<Message>();
 

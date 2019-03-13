@@ -23,10 +23,12 @@ repositories {
 }
 
 dependencies {
+	implementation('org.aspectj:aspectjweaver')
+	implementation('org.springframework:spring-aspects')
+	
 	implementation('com.h2database:h2')
 	implementation('org.springframework.boot:spring-boot-devtools')
 	implementation('org.springframework.boot:spring-boot-starter-actuator')
-	implementation('org.springframework.boot:spring-boot-starter-aop')
 	implementation('org.springframework.boot:spring-boot-starter-hateoas')
 	implementation('org.springframework.boot:spring-boot-starter-web')
 	

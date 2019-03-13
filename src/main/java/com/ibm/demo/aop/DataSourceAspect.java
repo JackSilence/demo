@@ -17,6 +17,20 @@ import com.ibm.demo.ds.DynamicDataSourceHolder;
 
 @Aspect
 @Component
+// 如果用aop.xml, 不透過Spring AOP, 拿到的會是java proxy的instance... 所以aop.xml裡面不能只include自己專案的package
+// 加上這邊的sqlSessionFactory是用Autowired的, 所以建議還是用Spring AOP
+// [RestartClassLoader@5d10f8bf] weaveinfo Join point 'method-execution(com.ibm.demo.model.City com.sun.proxy.$Proxy86.selectCityById(int))' in Type 'com.sun.proxy.$Proxy86' (no debug info available)
+// advised by before advice from 'com.ibm.demo.aop.DataSourceAspect' (DataSourceAspect.java)
+// [RestartClassLoader@5d10f8bf] weaveinfo Join point 'method-execution(com.ibm.demo.model.City com.sun.proxy.$Proxy86.selectCityById(int))' in Type 'com.sun.proxy.$Proxy86' (no debug info available)
+// advised by after advice from 'com.ibm.demo.aop.DataSourceAspect' (DataSourceAspect.java)
+// [RestartClassLoader@5d10f8bf] weaveinfo Join point 'method-execution(int com.sun.proxy.$Proxy86.updateCityById(int))' in Type 'com.sun.proxy.$Proxy86' (no debug info available) advised by before
+// advice from 'com.ibm.demo.aop.DataSourceAspect' (DataSourceAspect.java)
+// [RestartClassLoader@5d10f8bf] weaveinfo Join point 'method-execution(int com.sun.proxy.$Proxy86.updateCityById(int))' in Type 'com.sun.proxy.$Proxy86' (no debug info available) advised by after
+// advice from 'com.ibm.demo.aop.DataSourceAspect' (DataSourceAspect.java)
+// [RestartClassLoader@5d10f8bf] weaveinfo Join point 'method-execution(com.ibm.demo.model.City com.sun.proxy.$Proxy86.findByState(java.lang.String))' in Type 'com.sun.proxy.$Proxy86' (no debug info
+// available) advised by before advice from 'com.ibm.demo.aop.DataSourceAspect' (DataSourceAspect.java)
+// [RestartClassLoader@5d10f8bf] weaveinfo Join point 'method-execution(com.ibm.demo.model.City com.sun.proxy.$Proxy86.findByState(java.lang.String))' in Type 'com.sun.proxy.$Proxy86' (no debug info
+// available) advised by after advice from 'com.ibm.demo.aop.DataSourceAspect' (DataSourceAspect.java)
 public class DataSourceAspect {
 	private final Logger log = LoggerFactory.getLogger( this.getClass() );
 
@@ -48,7 +62,7 @@ public class DataSourceAspect {
 		}
 	}
 
-	@After( "mapper())" )
+	@After( "mapper()" )
 	public void after( JoinPoint point ) {
 		Source source = DynamicDataSourceHolder.get();
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<aspectj>
+	<weaver options="-XnoInline -Xreweavable -verbose -showWeaveInfo">
+		<include within="com.ibm..*" />
+	</weaver>
+</aspectj>

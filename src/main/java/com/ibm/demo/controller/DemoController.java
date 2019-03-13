@@ -59,6 +59,18 @@ public class DemoController {
 		throw new RuntimeException();
 	}
 
+	@GetMapping( "tx" )
+	public void tx() {
+		transaction();
+	}
+
+	@Transactional
+	private void transaction() {
+		update();
+
+		throw new RuntimeException();
+	}
+
 	private City writeAndRead() {
 		log.info( "Update Rows: {}", update() );
 

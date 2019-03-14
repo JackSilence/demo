@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-	implementation('org.aspectj:aspectjweaver')
+	implementation('org.aspectj:aspectjweaver:1.8.13')
 	implementation('org.springframework:spring-aspects')
 	
 	implementation('com.h2database:h2')
